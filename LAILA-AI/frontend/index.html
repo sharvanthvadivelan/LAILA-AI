@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#070B10" />
+    <title>LAILA · Personal assistant</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+        <a class="brand" href="/" aria-label="Laila home">
+          <span class="brand-mark" aria-hidden="true">L</span>
+          <span class="brand-name">LAILA<small>PERSONAL ASSISTANT</small></span>
+        </a>
+        <button id="new-chat" class="primary new-chat" type="button"><span aria-hidden="true">+</span> New conversation</button>
+        <label class="search-box"><span aria-hidden="true">⌕</span><input id="chat-search" placeholder="Search conversations" aria-label="Search conversations" /></label>
+        <nav id="navigation" aria-label="Workspace">
+          <p class="eyebrow nav-label">YOUR WORKSPACE</p>
+          <button class="nav-item" data-page="today" type="button"><span aria-hidden="true">◷</span> My day</button>
+          <button class="nav-item active" data-page="chat" type="button"><span aria-hidden="true">◇</span> Chat</button>
+          <button class="nav-item" data-page="documents" type="button"><span aria-hidden="true">▤</span> Documents</button>
+          <button class="nav-item" data-page="tasks" type="button"><span aria-hidden="true">☷</span> Tasks</button>
+          <button class="nav-item" data-page="notes" type="button"><span aria-hidden="true">▧</span> Notes</button>
+          <button class="nav-item" data-page="memory" type="button"><span aria-hidden="true">⌘</span> Memory</button>
+          <button class="nav-item" data-page="profile" type="button"><span aria-hidden="true">◉</span> About me</button>
+          <button class="nav-item" data-page="desktop" type="button"><span aria-hidden="true">▣</span> Desktop</button>
+        </nav>
+        <details class="history-section" open>
+          <summary class="eyebrow">RECENT CONVERSATIONS</summary>
+          <div id="history" class="history"></div>
+        </details>
+        <div class="sidebar-bottom">
+          <button class="nav-item" data-page="models" type="button"><span aria-hidden="true">◌</span> Models & system</button>
+          <button class="nav-item" data-page="settings" type="button"><span aria-hidden="true">⚙</span> Settings</button>
+          <div class="local-card"><span class="status-dot" aria-hidden="true"></span><div>On this device<small>Your workspace stays local</small></div></div>
+        </div>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div class="title-wrap">
+            <button id="menu" class="icon mobile" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+            <span class="top-brand">LAILA</span><span class="top-divider" aria-hidden="true">/</span>
+            <span id="page-title">Conversation</span><span class="version" id="app-version">v0.3.0</span>
+          </div>
+          <div class="top-status">
+            <span id="local-clock" class="local-clock" aria-label="Local time"></span>
+            <span id="model-badge" class="model-badge" role="status" aria-live="polite">Checking local model…</span>
+            <button id="focus-toggle" class="top-control focus-control" type="button" aria-pressed="false" title="Toggle focus mode">Focus</button>
+            <button id="motion-toggle" class="top-control motion-control" type="button" aria-pressed="false" title="Turn decorative animation off">Motion on</button>
+            <button id="day-toggle" class="icon mobile" type="button" aria-label="Open daily overview" aria-expanded="false">▤</button>
+            <button id="settings-shortcut" class="icon" type="button" aria-label="Open settings" title="Settings">⚙</button>
+          </div>
+        </header>
+        <div id="alert" class="alert" role="status" hidden></div>
+
+        <section id="chat-page" class="chat-page">
+          <div class="chat-toolbar">
+            <label><span class="eyebrow">MODE</span><select id="mode" aria-label="Conversation mode"><option value="chat">General assistant</option><option value="study">Study companion</option><option value="coding">Coding assistant</option><option value="data">Data analyst</option></select></label>
+            <div class="toolbar-actions">
+              <button id="pin-chat" class="subtle" type="button">Pin</button><button id="rename-chat" class="subtle" type="button">Rename</button><button id="clear-chat" class="subtle" type="button">Clear</button><button id="delete-chat" class="subtle danger-text" type="button">Delete</button>
+            </div>
+          </div>
+
+          <section class="assistant-stage" aria-label="Laila assistant status">
+            <div class="face-wrap" id="assistant-face" data-state="idle">
+              <video id="laila-video" class="laila-video" src="/static/laila-center.mp4" poster="/static/laila-portrait.svg" autoplay muted loop playsinline preload="metadata" controls aria-label="Laila holographic portrait video"></video>
+              <span class="recording-indicator" aria-hidden="true"></span>
+            </div>
+            <div class="assistant-copy">
+              <p class="eyebrow">YOUR LOCAL ASSISTANT</p>
+              <h1>Laila</h1>
+              <p id="assistant-status" class="assistant-status" data-state="idle" role="status" aria-live="polite"><span class="status-indicator" aria-hidden="true"></span><span id="assistant-status-text">Ready when you are</span></p>
+            </div>
+          </section>
+
+          <div id="chat-scroll" class="chat-scroll">
+            <div id="welcome" class="welcome" hidden></div>
+            <div id="messages" class="messages" aria-live="off"></div>
+          </div>
+
+          <div class="composer-area">
+            <div id="attachments" class="attachments"></div>
+            <div id="activity" class="activity" role="status" aria-live="polite"></div>
+            <form id="composer">
+              <textarea id="prompt" rows="2" placeholder="Message Laila…" aria-label="Message Laila" maxlength="24000"></textarea>
+              <div class="composer-footer">
+                <div class="composer-tools">
+                  <button type="button" id="attach-button" class="icon composer-icon" title="Attach document or image" aria-label="Attach document or image">＋</button>
+                  <button type="button" id="mic" class="voice-button" title="Start local voice recording" aria-label="Start local voice recording"><span aria-hidden="true">◖</span><span>Talk</span></button>
+                  <button type="button" id="cancel-recording" class="subtle" hidden>Cancel recording</button>
+                  <button type="button" id="stop-speaking" class="subtle" hidden>Stop speaking</button>
+                </div>
+                <div class="composer-submit">
+                  <span class="enter-hint">Shift + Enter for a new line</span>
+                  <button type="button" id="stop" class="stop-button" hidden>Stop</button>
+                  <button type="submit" id="send" class="send-button" aria-label="Send message" title="Send message">↑</button>
+                </div>
+              </div>
+            </form>
+            <div class="composer-caption"><span>Local model · your data stays on this device</span><span>Check important answers.</span></div>
+          </div>
+        </section>
+        <section id="workspace-page" class="workspace-page" hidden></section>
+      </main>
+
+      <aside id="daily-rail" class="daily-rail" aria-label="Daily overview">
+        <div class="rail-heading"><div><p class="eyebrow">YOUR DAY</p><h2 id="rail-date">Today</h2></div><button id="day-close" class="icon mobile" type="button" aria-label="Close daily overview">×</button><button id="rail-collapse" class="icon desktop-only" type="button" aria-label="Collapse daily overview" aria-expanded="true" title="Collapse daily overview">›</button></div>
+        <section class="rail-section"><div class="rail-section-head"><h3>Coming up</h3><button type="button" class="text-action" data-page="today">View day</button></div><div id="rail-schedule" class="rail-list"><p class="rail-empty">Loading your schedule…</p></div></section>
+        <section class="rail-section"><div class="rail-section-head"><h3>Open tasks</h3><button type="button" class="text-action" data-page="tasks">All tasks</button></div><div id="rail-tasks" class="rail-list"><p class="rail-empty">Loading your tasks…</p></div></section>
+        <section class="rail-section"><div class="rail-section-head"><h3>Local model</h3><button type="button" class="text-action" data-page="models">Details</button></div><div id="rail-model" class="rail-model"><span class="status-indicator" aria-hidden="true"></span><span>Checking connection…</span></div></section>
+        <section class="rail-section rail-desktop"><div class="rail-section-head"><h3>Desktop shortcuts</h3><button type="button" class="text-action" data-page="desktop">Manage</button></div><div id="rail-targets" class="rail-list"><p class="rail-empty">Loading approved targets…</p></div></section>
+        <p class="rail-footnote">Launches always require your approval.</p>
+      </aside>
+    </div>
+    <div id="drawer-scrim" class="drawer-scrim" hidden></div>
+    <input id="file-input" type="file" accept=".pdf,.docx,.txt,.md,.csv,.json,.xlsx,.png,.jpg,.jpeg,.webp" hidden />
+    <dialog id="editor">
+      <form id="editor-form">
+        <div class="dialog-head"><h2 id="editor-title"></h2><button type="button" id="close-editor" class="icon" aria-label="Close dialog">×</button></div>
+        <div id="editor-body"></div>
+        <div class="dialog-footer"><button type="button" id="cancel-editor" class="subtle">Cancel</button><button type="submit" class="primary">Save</button></div>
+      </form>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>

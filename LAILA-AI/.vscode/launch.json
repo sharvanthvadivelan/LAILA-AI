@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Laila: local backend + frontend",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "app.main:app",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000",
+        "--no-access-log"
+      ],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true,
+      "env": {
+        "HF_HUB_OFFLINE": "1",
+        "OLLAMA_NO_CLOUD": "1",
+        "HF_HUB_DISABLE_TELEMETRY": "1"
+      }
+    }
+  ]
+}

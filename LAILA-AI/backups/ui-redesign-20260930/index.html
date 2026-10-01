@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Laila AI · Your local intelligence</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="/" aria-label="Laila home"
+          ><span class="brand-mark">L<span>✦</span></span
+          ><span
+            >LAILA <small>AI</small><em>Your local intelligence</em></span
+          ></a
+        >
+        <button id="new-chat" class="primary new-chat">
+          <span>+</span> New conversation <kbd>Ctrl K</kbd>
+        </button>
+        <label class="search-box"
+          ><span>⌕</span
+          ><input
+            id="chat-search"
+            placeholder="Search conversations"
+            aria-label="Search conversations"
+        /></label>
+        <nav id="navigation" aria-label="Workspace">
+          <p class="eyebrow">WORKSPACE</p>
+          <button class="nav-item" data-page="today"><span>☀</span> My day</button>
+          <button class="nav-item" data-page="profile"><span>◉</span> About me</button>
+          <button class="nav-item" data-page="desktop"><span>⌘</span> Desktop</button>
+          <button class="nav-item active" data-page="chat">
+            <span>◈</span> Chat <small>01</small></button
+          ><button class="nav-item" data-page="documents">
+            <span>▤</span> Documents</button
+          ><button class="nav-item" data-page="tasks">
+            <span>☑</span> Tasks</button
+          ><button class="nav-item" data-page="notes">
+            <span>▧</span> Notes</button
+          ><button class="nav-item" data-page="memory">
+            <span>◇</span> Memory</button
+          ><button class="nav-item" data-page="models">
+            <span>⬡</span> Models & system
+          </button>
+        </nav>
+        <div class="history-head">
+          <span class="eyebrow">RECENT CONVERSATIONS</span>
+        </div>
+        <div id="history" class="history"></div>
+        <div class="sidebar-bottom">
+          <button class="nav-item" data-page="settings">
+            <span>⚙</span> Settings <small>↗</small>
+          </button>
+          <div class="local-card">
+            <span class="status-dot"></span>
+            <div>Local by design<small>Your workspace. Your data.</small></div>
+            <span>⌂</span>
+          </div>
+        </div>
+      </aside>
+      <main>
+        <header class="topbar">
+          <div class="title-wrap">
+            <button id="menu" class="icon mobile" aria-label="Toggle sidebar">
+              ☰</button
+            ><span id="page-title">Conversation</span
+            ><span class="version">v0.2</span>
+          </div>
+          <div class="top-status">
+            <span id="model-badge">Checking local engine…</span
+            ><button
+              id="settings-shortcut"
+              class="icon"
+              aria-label="Open settings"
+            >
+              ⚙
+            </button>
+          </div>
+        </header>
+        <div id="alert" class="alert" role="status" hidden></div>
+        <section id="chat-page" class="chat-page">
+          <div class="chat-toolbar">
+            <label
+              ><span class="eyebrow">MODE</span
+              ><select id="mode" aria-label="Conversation mode">
+                <option value="chat">General assistant</option>
+                <option value="study">Study companion</option>
+                <option value="coding">Coding assistant</option>
+                <option value="data">Data analyst</option>
+              </select></label
+            >
+            <div class="toolbar-actions">
+              <button id="pin-chat" class="subtle">Pin</button
+              ><button id="rename-chat" class="subtle">Rename</button
+              ><button id="clear-chat" class="subtle">Clear</button
+              ><button id="delete-chat" class="subtle danger-text">
+                Delete
+              </button>
+            </div>
+          </div>
+          <div id="chat-scroll" class="chat-scroll">
+            <div id="welcome" class="welcome">
+              <div class="welcome-orbit"><span>✦</span></div>
+              <p class="eyebrow blue">
+                LOCAL INTELLIGENT AI & LEARNING ASSISTANT
+              </p>
+              <h1>A little clarity.<br />A lot of possibility.</h1>
+              <p class="welcome-sub">
+                Think it through. Learn something new. Build what’s next.<br />Your
+                personal AI, running on your own machine.
+              </p>
+              <div class="suggestions">
+                <button
+                  data-prompt="Teach me recursion with a simple example, then give me a practice question."
+                  data-mode="study"
+                >
+                  <span class="tile-icon">◈</span
+                  ><strong>Understand something</strong
+                  ><small>Make the complex feel simple</small
+                  ><span class="tile-arrow">↗</span></button
+                ><button
+                  data-prompt="Help me debug my code. Ask me for the code, error message and expected behavior first."
+                  data-mode="coding"
+                >
+                  <span class="tile-icon">⌘</span
+                  ><strong>Build with confidence</strong
+                  ><small>A second pair of eyes on your code</small
+                  ><span class="tile-arrow">↗</span></button
+                ><button data-prompt="Calculate 25% of 840." data-mode="chat">
+                  <span class="tile-icon">÷</span><strong>Work it out</strong
+                  ><small>Get a checked calculation</small
+                  ><span class="tile-arrow">↗</span></button
+                ><button data-page="documents">
+                  <span class="tile-icon">▤</span
+                  ><strong>Ask your documents</strong
+                  ><small>Answers grounded in your files</small
+                  ><span class="tile-arrow">↗</span>
+                </button>
+              </div>
+              <div class="privacy-note">
+                <span>◇</span> No cloud account. No subscription required by
+                Laila.
+              </div>
+            </div>
+            <div id="messages" class="messages"></div>
+          </div>
+          <div class="composer-area">
+            <div id="attachments" class="attachments"></div>
+            <div id="activity" class="activity" role="status"></div>
+            <form id="composer">
+              <textarea
+                id="prompt"
+                rows="2"
+                placeholder="Message Laila…"
+                aria-label="Message Laila"
+                maxlength="24000"
+              ></textarea>
+              <div class="composer-footer">
+                <div>
+                  <button
+                    type="button"
+                    id="attach-button"
+                    class="icon"
+                    title="Attach document or image"
+                    aria-label="Attach document or image"
+                  >
+                    +</button
+                  ><button
+                    type="button"
+                    id="mic"
+                    class="voice-button"
+                    title="Start local voice recording"
+                  >
+                    ♩ <span>Talk to Laila</span></button
+                  ><button
+                    type="button"
+                    id="cancel-recording"
+                    class="subtle"
+                    hidden
+                  >
+                    Cancel recording</button
+                  ><button
+                    type="button"
+                    id="stop-speaking"
+                    class="subtle"
+                    hidden
+                  >
+                    Stop speaking
+                  </button>
+                </div>
+                <div>
+                  <span class="enter-hint">Shift + Enter for a new line</span
+                  ><button type="button" id="stop" class="stop-button" hidden>
+                    ■ Stop</button
+                  ><button
+                    type="submit"
+                    id="send"
+                    class="send-button"
+                    aria-label="Send message"
+                  >
+                    ↑
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div class="composer-caption">
+              <span>Runs locally after models are installed.</span
+              ><span>Laila can make mistakes. Check important answers.</span>
+            </div>
+          </div>
+        </section>
+        <section id="workspace-page" class="workspace-page" hidden></section>
+      </main>
+    </div>
+    <input
+      id="file-input"
+      type="file"
+      accept=".pdf,.docx,.txt,.md,.csv,.json,.xlsx,.png,.jpg,.jpeg,.webp"
+      hidden
+    />
+    <dialog id="editor">
+      <form id="editor-form">
+        <div class="dialog-head">
+          <h2 id="editor-title"></h2>
+          <button
+            type="button"
+            id="close-editor"
+            class="icon"
+            aria-label="Close dialog"
+          >
+            ×
+          </button>
+        </div>
+        <div id="editor-body"></div>
+        <div class="dialog-footer">
+          <button type="button" id="cancel-editor" class="subtle">Cancel</button
+          ><button type="submit" class="primary">Save</button>
+        </div>
+      </form>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>
